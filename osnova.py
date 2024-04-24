@@ -20,5 +20,9 @@ async def give(ctx):
     guild = ctx.guild
     role = guild.get_role(1232416938404085910)
     await member.add_roles(role)
+
+bot.command()
+asyns def voice(ctx)
     
+
 bot.run(config.token)
