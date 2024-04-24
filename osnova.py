@@ -17,12 +17,6 @@ async def poshel(stx):
     await stx.send('nahuy')
 
 @bot.command()
-async def dd(member):
-    role = get(member.server.roles, name="b")
-    await client.add_roles(member, role)    
-
-
-@bot.command()
 async def cc(ctx):
     member = ctx.author
     guild = ctx.guild
