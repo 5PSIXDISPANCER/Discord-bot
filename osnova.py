@@ -21,8 +21,21 @@ async def give(ctx):
     role = guild.get_role(1232416938404085910)
     await member.add_roles(role)
 
-bot.command()
-asyns def voice(ctx)
-    
+@bot.event
+async def on_message(ctx):
+    member = ctx.author
+    guild = ctx.guild
+    role = guild.get_role(config.token_role_nigger)
+    await member.add_roles(role)
+
+# Снятие ролей 
+@bot.command()
+async def b(ctx):
+    member = ctx.author
+    guild = ctx.guild
+    role = guild.get_role(config.token_role_nigger)
+    await member.remove_roles(role)
+
+
 
 bot.run(config.token)
