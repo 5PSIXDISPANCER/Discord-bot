@@ -11,7 +11,7 @@ bot = commands.Bot(command_prefix=PREFIX, intents=intents)
 @bot.command()
 async def ping(stx):
     await stx.send('pong')
-
+111
 @bot.command()
 async def poshel(stx):
     await stx.send('nahuy')
