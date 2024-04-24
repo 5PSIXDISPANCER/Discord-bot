@@ -10,7 +10,6 @@ bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 @bot.command()
 async def ping(stx):
     await stx.send('pong')
-    
 @bot.command()
 async def poshel(stx):
     await stx.send('nahuy')
@@ -23,7 +22,7 @@ async def give(ctx):
     await member.add_roles(role)
 
 @bot.event
-async def on_message(ctx):
+async def on_messeage(ctx):
     member = ctx.author
     guild = ctx.guild
     role = guild.get_role(config.token_role_nigger)
