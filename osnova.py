@@ -10,6 +10,7 @@ bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 @bot.command()
 async def ping(stx):
     await stx.send('pong')
+    
 @bot.command()
 async def poshel(stx):
     await stx.send('nahuy')
