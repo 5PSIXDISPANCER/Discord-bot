@@ -1,10 +1,11 @@
 import discord
+import config
 from discord.ext import commands
 from discord.utils import get
 
 intents = discord.Intents().all()
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 
 @bot.command()
 async def ping(stx):
@@ -21,4 +22,4 @@ async def give(ctx,rolename, member: discord.Member = None):
     await member.add_roles(role)
     await ctx.send(f'Роль {rolename} выдана {member}')
 
-bot.run('MTIzMjQwODgwNTkzNDEwODg4NQ.GlSw9Z.l2oB37atqjZN9uMEUman1DJ-rb4rbB91QpfSiA')
+bot.run(config.token)
