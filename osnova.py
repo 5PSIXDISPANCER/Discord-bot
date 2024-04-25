@@ -15,7 +15,6 @@ async def poshel(stx):
     await stx.send('nahuy')
 
 # Выдать роль
-# Выдать роль
 @bot.command()
 async def give(ctx,rolename, member: discord.Member = None):
     if member is None:
@@ -24,7 +23,7 @@ async def give(ctx,rolename, member: discord.Member = None):
     await member.add_roles(role)
     await ctx.send(f'Роль {rolename} выдана {member}')
 
-# Добавить роль
+# Убрать роль
 @bot.command()
 async def remove(ctx,rolename, member: discord.Member = None):
     if member is None:
