@@ -14,6 +14,7 @@ async def ping(stx):
 async def poshel(stx):
     await stx.send('nahuy')
 
+# Выдать роль
 @bot.command()
 async def give(ctx,rolename, member: discord.Member = None):
     if member is None:
@@ -21,5 +22,14 @@ async def give(ctx,rolename, member: discord.Member = None):
     role = get(ctx.guild.roles, name=rolename)
     await member.add_roles(role)
     await ctx.send(f'Роль {rolename} выдана {member}')
+
+# Добавить роль
+@bot.command()
+async def remove(ctx,rolename, member: discord.Member = None):
+    if member is None:
+        member = ctx.author
+    role = get(ctx.guild.roles, name=rolename)
+    await member.remove_roles(role)
+    await ctx.send(f'Роль {rolename} убрана у {member}')
 
 bot.run(config.token)
