@@ -13,8 +13,6 @@ bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 
 @bot.command()
 async def ping(stx):
-    await stx.send(bot.guilds)
-    await stx.send(len(bot.guilds[0].members))
     for i in range(len(bot.guilds)):
         await stx.send(f'Сервер {bot.guilds[i]} на нем находятся:')
         for x in range(len(bot.guilds[i].members)):
@@ -52,4 +50,16 @@ async def remove(ctx,rolename, member: discord.Member = None):
 #     channel = ctx.message.author.voice.channel
 #     await channel.connect()
 
+# @bot.event
+# async def on_ready():
+
+@bot.command()
+async def gel(ctx, amount = 100):
+     await ctx.channel.purge(limit = amount);
+
+@bot.event
+async def on_ready():
+    channel = bot.get_channel(1233749922893922335)
+    members = bot.get_user(701855944384053348)
+    await channel.send(members)
 bot.run(config.token)
