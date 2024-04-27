@@ -33,9 +33,22 @@ async def remove(ctx,rolename, member: discord.Member = None):
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member}')
 
+# @bot.event
+# async def on_ready():
+
 @bot.command()
-async def poshe(stx):
-    await stx.send('nahuy')
+async def gel(ctx, amount = 100):
+     await ctx.channel.purge(limit = amount);
+
+@bot.event
+async def on_ready():
+    channel = bot.get_channel(1233749922893922335)
+    members = bot.get_user(701855944384053348)
+    await channel.send(members)
+
+
+
+
     
 
 
