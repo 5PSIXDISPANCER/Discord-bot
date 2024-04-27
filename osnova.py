@@ -10,6 +10,7 @@ bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 @bot.command()
 async def ping(stx):
     await stx.send('pong')
+
 @bot.command()
 async def poshel(stx):
     await stx.send('nahuy')
@@ -31,5 +32,11 @@ async def remove(ctx,rolename, member: discord.Member = None):
     role = get(ctx.guild.roles, name=rolename)
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member}')
+
+@bot.command()
+async def poshe(stx):
+    await stx.send('nahuy')
+    
+
 
 bot.run(config.token)
