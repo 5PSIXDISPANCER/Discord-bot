@@ -14,10 +14,16 @@ intents = discord.Intents().all()
 
 bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 
-async def log(message):
-    with open('log.txt', 'a') as file:
-        file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.content}\n')
-        file.close()
+async def log(message: discord.Message):
+    if message.attachments != None:
+        for i in range(len(message.attachments)):
+            with open('log.txt', 'a') as file:
+                file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')
+                file.close()
+    else:
+        with open('log.txt', 'a') as file:
+            file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.content}\n')
+            file.close()
 
 @bot.event
 async def on_message(message: discord.Message):
@@ -88,9 +94,9 @@ async def remove(ctx, rolename, member: discord.Member = None):
 async def gel(ctx, amount = 100):
      await ctx.channel.purge(limit = amount)
 
-@bot.event
-async def on_ready():
-    channel = bot.get_channel(1233749922893922335)
-    members = bot.get_user(701855944384053348)
-    await channel.send(members)
+# @bot.event
+# async def on_ready():
+#     channel = bot.get_channel(1233749922893922335)
+#     members = bot.get_user(701855944384053348)
+#     await channel.send(members)
 bot.run(config.token)
