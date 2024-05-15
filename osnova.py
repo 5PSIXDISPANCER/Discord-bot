@@ -26,7 +26,6 @@ async def on_message(message: discord.Message):
 
 @bot.command()
 async def logs(ctx):
-    print('work')
     await ctx.send(file=discord.File(r'log.txt'))
 
 @bot.command()
