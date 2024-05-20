@@ -31,6 +31,12 @@
 #     await channel.send(f"Пидорасы, что меня разрабатывают и используют {user_1.mention} и {user_2.mention}")
 # внесение в конфиг soft_devolopment_dima = и тп
 # Функция для записи в текствой файл даты и времени, автора с id и текстом сообщения + запись в канал
+
+
+
+
+
+# Реализовано
 # @bot.event
 # async def on_message(ctx):
 #     if ctx.author != bot.user:

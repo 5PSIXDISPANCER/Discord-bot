@@ -6,6 +6,7 @@ import config
 
 from datetime import datetime
 from openpyxl import Workbook
+from discord_webhook import DiscordWebhook, DiscordEmbed
 from discord.voice_client import VoiceClient
 from discord.ext import commands
 from discord.utils import get
@@ -15,18 +16,30 @@ intents = discord.Intents().all()
 bot = commands.Bot(command_prefix=config.prefix, intents=intents)
 
 async def log(message: discord.Message):
-    if message.attachments != None:
+    if message.attachments:
         for i in range(len(message.attachments)):
             with open('log.txt', 'a') as file:
                 file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')
-                file.close()
     else:
         with open('log.txt', 'a') as file:
             file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.content}\n')
-            file.close()
+        log_webhook = DiscordWebhook(url="https://discord.com/api/webhooks/1242202771294261429/kch_F1G9r3k9SdQn1LzpOQtr4fSyuc9ZpAYfE_ad5GWPthLVXSCfIh8xhf_CUx8o-DIo")
+        log_embed = DiscordEmbed()
+        log_embed.set_author(name= message.author.global_name,  icon_url=message.author.avatar.url)
+        log_embed.set_title(title='Сообщение')
+        log_embed.set_description(description= message.content)
+        log_embed.add_embed_field(name = 'Дата', value = f'{datetime.now().strftime("%d/%m/%Y")}')
+        log_embed.add_embed_field(name = 'Время', value = f'{datetime.now().strftime("%H:%M:%S")}', inline=False)
+        log_embed.add_embed_field(name = 'Канал', value = f'{message.channel}')
+        log_embed.add_embed_field(name = 'Id канала', value = f'{message.channel.id}')
+        log_webhook.add_embed(log_embed)
+        response = log_webhook.execute()
+
 
 @bot.event
 async def on_message(message: discord.Message):
+    if message.webhook_id is not None:
+        return
     await bot.process_commands(message)
     await log(message)
 
