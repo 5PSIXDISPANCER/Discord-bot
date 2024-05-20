@@ -23,5 +23,5 @@
 # async def on_message(ctx):
 #     f = open("Logs.txt", "a")
 #     now = datetime.now()
-#     f.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author} ({ctx.author.id}) Сообщение: {ctx.content}\n")
+#     f.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author} ({ctx.author.id}) Категория: {ctx.channel.category} ({ctx.channel.category.id}) Канал: {ctx.channel} ({ctx.channel.id}) Сообщение: {ctx.content}\n")
 #     f.close()
