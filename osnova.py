@@ -75,28 +75,9 @@ async def remove(ctx, rolename, member: discord.Member = None):
     role = get(ctx.guild.roles, name=rolename)
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
-# Доработать
-# @bot.command()
-# async def play(ctx, yt):
-#     if ctx.author.voice is None:
-#         await ctx.send('Зайдите в войс канал и попробуйте снова')
-#         return
-#     yt = pytube.YouTube(yt)
-#     stream = yt.streams.filter(only_audio=True).first().download()
-#     await ctx.send(f"Видео успешно загружено! {yt}")
-#     channel = ctx.message.author.voice.channel
-#     await channel.connect()
-
-# @bot.event
-# async def on_ready():
 
 @bot.command()
 async def gel(ctx, amount = 100):
      await ctx.channel.purge(limit = amount)
 
-# @bot.event
-# async def on_ready():
-#     channel = bot.get_channel(1233749922893922335)
-#     members = bot.get_user(701855944384053348)
-#     await channel.send(members)
 bot.run(config.token)

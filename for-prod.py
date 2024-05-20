@@ -1,3 +1,16 @@
+# Доработать
+# @bot.command()
+# async def play(ctx, yt):
+#     if ctx.author.voice is None:
+#         await ctx.send('Зайдите в войс канал и попробуйте снова')
+#         return
+#     yt = pytube.YouTube(yt)
+#     stream = yt.streams.filter(only_audio=True).first().download()
+#     await ctx.send(f"Видео успешно загружено! {yt}")
+#     channel = ctx.message.author.voice.channel
+#     await channel.connect()
+
+
 # Функция удаления сообщений с аргументом в виде скольких сообщений будем дорабатоваться.
 # import asyncio
 # @bot.command()
