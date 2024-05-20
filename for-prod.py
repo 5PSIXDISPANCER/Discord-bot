@@ -17,11 +17,13 @@
 #     user_2 = guild.get_member(config.soft_devolopment_kirill)
 #     await channel.send(f"Пидорасы, что меня разрабатывают и используют {user_1.mention} и {user_2.mention}")
 # внесение в конфиг soft_devolopment_dima = и тп
-# Функция для записи в текствой файл даты и времени, автора с id и текстом сообщения
-# from datetime import datetime
+# Функция для записи в текствой файл даты и времени, автора с id и текстом сообщения + запись в канал
 # @bot.event
 # async def on_message(ctx):
 #     f = open("Logs.txt", "a")
 #     now = datetime.now()
 #     f.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author} ({ctx.author.id}) Категория: {ctx.channel.category} ({ctx.channel.category.id}) Канал: {ctx.channel} ({ctx.channel.id}) Сообщение: {ctx.content}\n")
 #     f.close()
+#     channel = bot.get_channel(config.channel)
+#     if ctx.author != bot.user:
+#         await channel.send(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author} ({ctx.author.id}) Категория: {ctx.channel.category} ({ctx.channel.category.id}) Канал: {ctx.channel} ({ctx.channel.id}) Сообщение: {ctx.content}\n")
