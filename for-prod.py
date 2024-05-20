@@ -16,4 +16,4 @@
 #     user_1 = guild.get_member(config.soft_devolopment_dima) 
 #     user_2 = guild.get_member(config.soft_devolopment_kirill)
 #     await channel.send(f"Пидорасы, что меня разрабатывают и используют {user_1.mention} и {user_2.mention}")
-# внесение в конфиг soft_devolopment_dima = 447297143766777857 soft_devolopment_kirill = 701855944384053348
+# внесение в конфиг soft_devolopment_dima = 
