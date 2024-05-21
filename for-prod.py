@@ -32,17 +32,4 @@
 # внесение в конфиг soft_devolopment_dima = и тп
 # Функция для записи в текствой файл даты и времени, автора с id и текстом сообщения + запись в канал
 
-
-
-
-
-# Реализовано
-# @bot.event
-# async def on_message(ctx):
-#     if ctx.author != bot.user:
-#         f = open("Logs.txt", "a")
-#         now = datetime.now()
-#         f.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author} ({ctx.author.id}) Категория: {ctx.channel.category} ({ctx.channel.category.id}) Канал: {ctx.channel} ({ctx.channel.id}) Сообщение: {ctx.content}\n")
-#         f.close()
-#         channel = bot.get_channel(config.channel)
-#         await channel.send(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {ctx.author.mention} ({ctx.author.id}) Категория: {ctx.channel.category} ({ctx.channel.category.id}) Канал: {ctx.channel.mention} ({ctx.channel.id}) Сообщение: {ctx.jump_url}\n")
+# if message.isdigit():
