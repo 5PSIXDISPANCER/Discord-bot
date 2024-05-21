@@ -99,7 +99,6 @@ async def remove(ctx, rolename, member: discord.Member = None):
 @bot.command()
 async def delete(ctx, content):
         if content.isdigit() == True:   
-            print(content.isdigit())
             content = int(content)
             await ctx.channel.purge(limit=content)
             await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
