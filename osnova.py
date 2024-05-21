@@ -1,7 +1,7 @@
 import discord
 # import pytube
 import openpyxl
-
+import asyncio
 import config
 
 from datetime import datetime #для времени
@@ -94,6 +94,25 @@ async def remove(ctx, rolename, member: discord.Member = None):
     role = get(ctx.guild.roles, name=rolename)
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
+    
+#удаление сообщений посредством ввода аргумента как число, так и слова все или алл как угодно  
+@bot.command()
+async def delete(ctx, content):
+        if content.isdigit() == True:   
+            print(content.isdigit())
+            content = int(content)
+            await ctx.channel.purge(limit=content)
+            await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+            await asyncio.sleep(3)
+            await ctx.channel.purge(limit=1)
+        elif content.isalpha():
+              content = str(content.lower())
+              if content == "all" or "все": 
+                await ctx.channel.purge(limit=100)
+                await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                await asyncio.sleep(3)
+                await ctx.channel.purge(limit=1)    
+
 
 
 bot.run(config.token)

@@ -29,7 +29,4 @@
 #     user_1 = guild.get_member(config.soft_devolopment_dima) 
 #     user_2 = guild.get_member(config.soft_devolopment_kirill)
 #     await channel.send(f"Пидорасы, что меня разрабатывают и используют {user_1.mention} и {user_2.mention}")
-# внесение в конфиг soft_devolopment_dima = и тп
-# Функция для записи в текствой файл даты и времени, автора с id и текстом сообщения + запись в канал
 
-# if message.isdigit():
