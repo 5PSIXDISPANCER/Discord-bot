@@ -26,7 +26,7 @@ async def log(message: discord.Message):
     else:
         with open('log.txt', 'a') as file:
              file.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {message.author} ({message.author.id}) Категория: {message.channel.category} ({message.channel.category.id}) Канал: {message.channel} ({message.channel.id}) Сообщение: {message.content}\n")
-        log_webhook = DiscordWebhook(url="https://discord.com/api/webhooks/1242202771294261429/kch_F1G9r3k9SdQn1LzpOQtr4fSyuc9ZpAYfE_ad5GWPthLVXSCfIh8xhf_CUx8o-DIo")
+        log_webhook = DiscordWebhook(url=config.url)
         log_embed = DiscordEmbed()
         log_embed.set_author(name= message.author.global_name,  icon_url=message.author.avatar.url)
         log_embed.set_title(title='Сообщение')
