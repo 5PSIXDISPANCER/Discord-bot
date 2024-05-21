@@ -1,5 +1,5 @@
 import discord
-import pytube
+# import pytube
 import openpyxl
 
 import config
@@ -27,11 +27,13 @@ async def log(message: discord.Message):
         log_embed = DiscordEmbed()
         log_embed.set_author(name= message.author.global_name,  icon_url=message.author.avatar.url)
         log_embed.set_title(title='Сообщение')
-        log_embed.set_description(description= message.content)
+        log_embed.set_description(description = message.content)
+        log_embed.add_embed_field(name = 'Пользователь и его ID', value = f'{message.author.mention} ( {message.author.id} )', inline = False)
         log_embed.add_embed_field(name = 'Дата', value = f'{datetime.now().strftime("%d/%m/%Y")}')
         log_embed.add_embed_field(name = 'Время', value = f'{datetime.now().strftime("%H:%M:%S")}', inline=False)
-        log_embed.add_embed_field(name = 'Канал', value = f'{message.channel}')
-        log_embed.add_embed_field(name = 'Id канала', value = f'{message.channel.id}')
+        log_embed.add_embed_field(name = 'Категория и её ID', value = f'{message.channel.category} ( {message.channel.category.id} )', inline=False)
+        log_embed.add_embed_field(name = 'Канал и его ID', value = f'{message.channel.mention} ( {message.channel.id} )')
+        log_embed.add_embed_field(name = 'Ссылка на сообщение', value = f'{message.jump_url}', inline=False)
         log_webhook.add_embed(log_embed)
         response = log_webhook.execute()
 
