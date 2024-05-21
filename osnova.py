@@ -4,33 +4,36 @@ import openpyxl
 
 import config
 
-from datetime import datetime
-from openpyxl import Workbook
-from discord_webhook import DiscordWebhook, DiscordEmbed
+from datetime import datetime #для времени
+from openpyxl import Workbook #для логов
+from discord_webhook import DiscordWebhook, DiscordEmbed #для логов
 from discord.voice_client import VoiceClient
-from discord.ext import commands
-from discord.utils import get
+from discord.ext import commands #импорт bot.command()
+from discord.utils import get #импорт get
 
-intents = discord.Intents().all()
+#Переменные необходимые в коде, для его сокращения.
+intents = discord.Intents().all() #разрешения
+bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
+now = datetime.now() #время и дата
 
-bot = commands.Bot(command_prefix=config.prefix, intents=intents)
-
+#логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: discord.Message):
     if message.attachments:
         for i in range(len(message.attachments)):
             with open('log.txt', 'a') as file:
-                file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')
+                 file.write(f'{now.strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')
+                
     else:
         with open('log.txt', 'a') as file:
-            file.write(f'{datetime.now().strftime("%H:%M:%S")} {message.author.name}: {message.content}\n')
+             file.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {message.author} ({message.author.id}) Категория: {message.channel.category} ({message.channel.category.id}) Канал: {message.channel} ({message.channel.id}) Сообщение: {message.content}\n")
         log_webhook = DiscordWebhook(url="https://discord.com/api/webhooks/1242202771294261429/kch_F1G9r3k9SdQn1LzpOQtr4fSyuc9ZpAYfE_ad5GWPthLVXSCfIh8xhf_CUx8o-DIo")
         log_embed = DiscordEmbed()
         log_embed.set_author(name= message.author.global_name,  icon_url=message.author.avatar.url)
         log_embed.set_title(title='Сообщение')
         log_embed.set_description(description = message.content)
         log_embed.add_embed_field(name = 'Пользователь и его ID', value = f'{message.author.mention} ( {message.author.id} )', inline = False)
-        log_embed.add_embed_field(name = 'Дата', value = f'{datetime.now().strftime("%d/%m/%Y")}')
-        log_embed.add_embed_field(name = 'Время', value = f'{datetime.now().strftime("%H:%M:%S")}', inline=False)
+        log_embed.add_embed_field(name = 'Дата', value = f'{now.strftime("%d/%m/%Y")}')
+        log_embed.add_embed_field(name = 'Время', value = f'{now.strftime("%H:%M:%S")}', inline=False)
         log_embed.add_embed_field(name = 'Категория и её ID', value = f'{message.channel.category} ( {message.channel.category.id} )', inline=False)
         log_embed.add_embed_field(name = 'Канал и его ID', value = f'{message.channel.mention} ( {message.channel.id} )')
         log_embed.add_embed_field(name = 'Ссылка на сообщение', value = f'{message.jump_url}', inline=False)
@@ -91,8 +94,5 @@ async def remove(ctx, rolename, member: discord.Member = None):
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
 
-@bot.command()
-async def gel(ctx, amount = 100):
-     await ctx.channel.purge(limit = amount)
 
 bot.run(config.token)
