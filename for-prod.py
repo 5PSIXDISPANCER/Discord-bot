@@ -30,3 +30,4 @@
 #     user_2 = guild.get_member(config.soft_devolopment_kirill)
 #     await channel.send(f"Пидорасы, что меня разрабатывают и используют {user_1.mention} и {user_2.mention}")
 
+111
