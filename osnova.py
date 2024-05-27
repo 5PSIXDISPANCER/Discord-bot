@@ -1,15 +1,15 @@
 import discord
 # import pytube
 import openpyxl
-import asyncio
+from asyncio import sleep
 import config
 
-from datetime import datetime #для времени
-from openpyxl import Workbook #для логов
-from discord_webhook import DiscordWebhook, DiscordEmbed #для логов
+from datetime import datetime
+from openpyxl import Workbook
+from discord_webhook import DiscordWebhook, DiscordEmbed 
 from discord.voice_client import VoiceClient
-from discord.ext import commands #импорт bot.command()
-from discord.utils import get #импорт get
+from discord.ext import commands 
+from discord.utils import get 
 
 #Переменные необходимые в коде, для его сокращения.
 intents = discord.Intents().all() #разрешения
@@ -73,7 +73,7 @@ async def ping(stx):
     book.close
     await stx.send(file = discord.File(r'parser.xlsx'))
 
-@bot.command()
+@bot.tree.command()
 async def poshel(stx):
     await stx.send(bot.guilds[0].members[0].default_avatar)
 
@@ -102,14 +102,14 @@ async def delete(ctx, content):
             content = int(content)
             await ctx.channel.purge(limit=content)
             await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
-            await asyncio.sleep(3)
+            await sleep(3)
             await ctx.channel.purge(limit=1)
         elif content.isalpha():
               content = str(content.lower())
               if content == "all" or "все": 
                 await ctx.channel.purge(limit=100)
                 await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
-                await asyncio.sleep(3)
+                await sleep(3)
                 await ctx.channel.purge(limit=1)    
 
 
