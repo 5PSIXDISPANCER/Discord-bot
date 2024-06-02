@@ -1,9 +1,9 @@
 import discord
 # import pytube
-import openpyxl
 from asyncio import sleep
 import config
 
+from db import *
 from datetime import datetime
 from openpyxl import Workbook
 from discord_webhook import DiscordWebhook, DiscordEmbed 
@@ -15,16 +15,24 @@ from discord.utils import get
 intents = discord.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
 
+@bot.command()
+async def resdb():
+    await dblogging(bot)  
+
+
+@bot.event
+async def on_guild_join(guild: discord.Guild):
+    print(f'Bee прилетел на {guild.name}')
+    await db_add_guild(guild)
+
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: discord.Message):
     now = datetime.now()
     if message.attachments:
         for i in range(len(message.attachments)):
             with open('log.txt', 'a') as file:
-                 file.write(f'{now.strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')
-                
+                 file.write(f'{now.strftime("%H:%M:%S")} {message.author.name}: {message.attachments[i]}\n')      
     else:
-        
         with open('log.txt', 'a') as file:
              file.write(f"Дата: {now.strftime("%d/%m/%Y")} Время: {now.strftime("%H:%M:%S")} Автор: {message.author} ({message.author.id}) Категория: {message.channel.category} ({message.channel.category.id}) Канал: {message.channel} ({message.channel.id}) Сообщение: {message.content}\n")
         log_webhook = DiscordWebhook(url='https://discord.com/api/webhooks/1242202771294261429/kch_F1G9r3k9SdQn1LzpOQtr4fSyuc9ZpAYfE_ad5GWPthLVXSCfIh8xhf_CUx8o-DIo')
@@ -39,8 +47,7 @@ async def log(message: discord.Message):
         log_embed.add_embed_field(name = 'Канал и его ID', value = f'{message.channel.mention} ( {message.channel.id} )')
         log_embed.add_embed_field(name = 'Ссылка на сообщение', value = f'{message.jump_url}', inline=False)
         log_webhook.add_embed(log_embed)
-        response = log_webhook.execute()
-
+        response = log_webhook.execute() 
 
 @bot.event
 async def on_message(message: discord.Message):
@@ -48,6 +55,13 @@ async def on_message(message: discord.Message):
         return
     await bot.process_commands(message)
     await log(message)
+    await db_add_exp(message)
+
+
+@bot.command()
+async def exp(ctx):
+    response = await db_get_exp(ctx)
+    await ctx.send(f'У {ctx.author.mention} {response} exp')
 
 @bot.command()
 async def logs(ctx):
@@ -58,7 +72,6 @@ async def ping(stx):
     book = Workbook()
     sheep = book.active
     mainRow = 1
-
     for i in range(len(bot.guilds)):
         sheep.cell(row = mainRow, column = 1, value = bot.guilds[i].name)
         for x in range(len(bot.guilds[i].members)):
