@@ -6,25 +6,28 @@ import config
 from db import *
 from datetime import datetime
 from openpyxl import Workbook
+from dpyConsole import Console
 from discord_webhook import DiscordWebhook, DiscordEmbed 
 from discord.voice_client import VoiceClient
 from discord.ext import commands 
 from discord.utils import get 
 
+
 #Переменные необходимые в коде, для его сокращения.
 intents = discord.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
-
-@bot.command()
-async def resdb():
-    await dblogging(bot)  
-
+my_console = Console(bot)
 
 @bot.event
 async def on_guild_join(guild: discord.Guild):
     print(f'Bee прилетел на {guild.name}')
     await db_add_guild(guild)
 
+@my_console.command()
+async def hey(user: discord.User):  # Library automatically converts type annotations, just like in discord.py
+    print(f"Sending message to {user.name} id: = {user.id}")
+    await user.send(f"Hello from Console Im {client.user.name}")
+    
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: discord.Message):
     now = datetime.now()
@@ -57,6 +60,9 @@ async def on_message(message: discord.Message):
     await log(message)
     await db_add_exp(message)
 
+@bot.command()
+async def resdb(stx):
+    await dblogging(bot)
 
 @bot.command()
 async def exp(ctx):
@@ -126,5 +132,5 @@ async def delete(ctx, content):
                 await ctx.channel.purge(limit=1)    
 
 
-
+my_console.start()
 bot.run(config.token)
