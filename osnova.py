@@ -15,10 +15,10 @@ from discord.utils import get
 intents = discord.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
 
-@bot.command()
-async def resdb():
-    await dblogging(bot)  
 
+@bot.command()
+async def beee(ctx):
+    await dblogging(bot)  
 
 @bot.event
 async def on_guild_join(guild: discord.Guild):
