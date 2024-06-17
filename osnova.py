@@ -1,4 +1,4 @@
-import discord
+import disnake
 # import pytube
 from asyncio import sleep
 import config
@@ -7,29 +7,32 @@ from db import *
 from datetime import datetime
 from openpyxl import Workbook
 from dpyConsole import Console
+from disnake.ui import Button, View
 from discord_webhook import DiscordWebhook, DiscordEmbed 
-from discord.voice_client import VoiceClient
-from discord.ext import commands 
-from discord.utils import get 
+from disnake.voice_client import VoiceClient
+from disnake.ext import commands 
+from disnake.utils import get 
 
 
 #Переменные необходимые в коде, для его сокращения.
-intents = discord.Intents().all() #разрешения
+intents = disnake.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
 my_console = Console(bot)
 
 @bot.event
-async def on_guild_join(guild: discord.Guild):
+async def on_guild_join(guild: disnake.Guild):
     print(f'Bee прилетел на {guild.name}')
     await db_add_guild(guild)
 
-@my_console.command()
-async def hey(user: discord.User):  # Library automatically converts type annotations, just like in discord.py
-    print(f"Sending message to {user.name} id: = {user.id}")
-    await user.send(f"Hello from Console Im {client.user.name}")
-    
+# @my_console.command()
+# async def resdb():
+#     print('Are you sure? Y/N')
+#     a = await input().lower()
+#     if a == 'y':
+#         print('DB reset starting')
+#         await dblogging(bot)   
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
-async def log(message: discord.Message):
+async def log(message: disnake.Message):
     now = datetime.now()
     if message.attachments:
         for i in range(len(message.attachments)):
@@ -53,16 +56,13 @@ async def log(message: discord.Message):
         response = log_webhook.execute() 
 
 @bot.event
-async def on_message(message: discord.Message):
+async def on_message(message: disnake.Message):
     if message.webhook_id is not None:
         return
     await bot.process_commands(message)
     await log(message)
     await db_add_exp(message)
 
-@bot.command()
-async def resdb(stx):
-    await dblogging(bot)
 
 @bot.command()
 async def exp(ctx):
@@ -71,7 +71,7 @@ async def exp(ctx):
 
 @bot.command()
 async def logs(ctx):
-    await ctx.send(file=discord.File(r'log.txt'))
+    await ctx.send(file=disnake.File(r'log.txt'))
 
 @bot.command()
 async def ping(stx):
@@ -90,15 +90,15 @@ async def ping(stx):
             mainRow += 1
     book.save('parser.xlsx')
     book.close
-    await stx.send(file = discord.File(r'parser.xlsx'))
+    await stx.send(file = disnake.File(r'parser.xlsx'))
 
-@bot.tree.command()
+@bot.command(description="Sends the bot's latency.")
 async def poshel(stx):
     await stx.send(bot.guilds[0].members[0].default_avatar)
 
 # Выдать роль
 @bot.command()
-async def give(ctx,rolename, member: discord.Member = None):
+async def give(ctx,rolename, member: disnake.Member = None):
     if member is None:
         member = ctx.author
     role = get(ctx.guild.roles, name=rolename)
@@ -107,7 +107,7 @@ async def give(ctx,rolename, member: discord.Member = None):
 
 # Убрать роль
 @bot.command()
-async def remove(ctx, rolename, member: discord.Member = None):
+async def remove(ctx, rolename, member: disnake.Member = None):
     if member is None:
         member = ctx.author
     role = get(ctx.guild.roles, name=rolename)
@@ -131,6 +131,25 @@ async def delete(ctx, content):
                 await sleep(3)
                 await ctx.channel.purge(limit=1)    
 
+# @bot.command()
+# async def fff(stx: disnake.Member, member: disnake.User = None):
+#     view = View()
+#     embedfff = disnake.Embed(title='title', description='fff')
+#     embedfff.add_field(name='1 player', value=f'{stx}')
+#     embedfff.add_field(name='2 player', value=f'{member}')
+#     buttonStone = Button(label='Камень', style=disnake.ButtonStyle.primary)
+#     buttonScissors = Button(label='Ножницы', style=disnake.ButtonStyle.primary)
+#     buttonPaper = Button(label='Бумага', style=disnake.ButtonStyle.primary)
+#     view = View()
+#     view.add_item(buttonStone)
+#     view.add_item(buttonScissors)
+#     view.add_item(buttonPaper)
+#     await stx.send(embed=embedfff)
+#     await stx.send(view=view)
+    
+@bot.slash_command(name ='ебатьслешкоманда')
+async def ebat(ctx):
+    await ctx.send('Да я сам охуел')
 
 my_console.start()
 bot.run(config.token)
