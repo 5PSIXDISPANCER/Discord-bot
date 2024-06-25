@@ -125,7 +125,7 @@ async def delete(ctx, content):
             await ctx.channel.purge(limit=1)
         elif content.isalpha():
               content = str(content.lower())
-              if content == "all" or "все": 
+              if content == "all" or content == "все":
                 await ctx.channel.purge(limit=100)
                 await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
                 await sleep(3)
