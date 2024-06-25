@@ -4,7 +4,7 @@ from asyncio import sleep
 import config
 
 from db import *
-from datetime import datetime
+import datetime
 from openpyxl import Workbook
 from dpyConsole import Console
 from disnake.ui import Button, View
@@ -33,7 +33,7 @@ async def on_guild_join(guild: disnake.Guild):
 #         await dblogging(bot)   
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: disnake.Message):
-    now = datetime.now()
+    now = datetime.datetime.now()
     if message.attachments:
         for i in range(len(message.attachments)):
             with open('log.txt', 'a') as file:
@@ -131,21 +131,26 @@ async def delete(ctx, content):
                 await sleep(3)
                 await ctx.channel.purge(limit=1)    
 
-# @bot.command()
-# async def fff(stx: disnake.Member, member: disnake.User = None):
-#     view = View()
-#     embedfff = disnake.Embed(title='title', description='fff')
-#     embedfff.add_field(name='1 player', value=f'{stx}')
-#     embedfff.add_field(name='2 player', value=f'{member}')
-#     buttonStone = Button(label='Камень', style=disnake.ButtonStyle.primary)
-#     buttonScissors = Button(label='Ножницы', style=disnake.ButtonStyle.primary)
-#     buttonPaper = Button(label='Бумага', style=disnake.ButtonStyle.primary)
-#     view = View()
-#     view.add_item(buttonStone)
-#     view.add_item(buttonScissors)
-#     view.add_item(buttonPaper)
-#     await stx.send(embed=embedfff)
-#     await stx.send(view=view)
+@bot.command()
+async def fff(stx,   member: disnake.Member = None):
+    if member == None:
+        await stx.send(f"{stx.author.mention} Ты конченный нахуй? ДОЛБАЕБ ВЫЗОВИ ДРУГОГО, ИДИОТ НАХУЙ, ЭТО ИГРА НА ДВОИХ! ТЫ ЗАБАНЕН БЛЯТЬ! \n https://youtu.be/K0pQy3oEF0k?si=Uc6ksR3hyhyEyFzN")
+        time = datetime.datetime.now() + datetime.timedelta(seconds=10)
+        await stx.author.timeout(until=time, reason="ДОЛБАЕБ")
+        return
+    view = View()
+    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!', description='fff')
+    embedfff.add_field(name='1 player', value=f'{stx.author}')
+    embedfff.add_field(name='2 player', value=f'{member}')
+    buttonStone = Button(label='Камень', style=disnake.ButtonStyle.primary)
+    buttonScissors = Button(label='Ножницы', style=disnake.ButtonStyle.primary)
+    buttonPaper = Button(label='Бумага', style=disnake.ButtonStyle.primary)
+    view = View()
+    view.add_item(buttonStone)
+    view.add_item(buttonScissors)
+    view.add_item(buttonPaper)
+    await stx.send(embed=embedfff)
+    await stx.send(view=view)
     
 @bot.slash_command(name ='ебатьслешкоманда')
 async def ebat(ctx):
