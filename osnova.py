@@ -64,10 +64,10 @@ async def on_message(message: disnake.Message):
     await db_add_exp(message)
 
 
-@bot.command()
-async def exp(ctx):
-    response = await db_get_exp(ctx)
-    await ctx.send(f'У {ctx.author.mention} {response} exp')
+# @bot.command()
+# async def exp(ctx):
+#     response = await db_get_exp(ctx)
+#     await ctx.send(f'У {ctx.author.mention} {response} exp')
 
 @bot.command()
 async def logs(ctx):
@@ -139,7 +139,7 @@ async def fff(stx,   member: disnake.Member = None):
         await stx.author.timeout(until=time, reason="ДОЛБАЕБ")
         return
     view = View()
-    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!', description='fff')
+    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!')
     embedfff.add_field(name='1 player', value=f'{stx.author}')
     embedfff.add_field(name='2 player', value=f'{member}')
     buttonStone = Button(label='Камень', style=disnake.ButtonStyle.primary)
@@ -155,6 +155,25 @@ async def fff(stx,   member: disnake.Member = None):
 @bot.slash_command(name ='ебатьслешкоманда')
 async def ebat(ctx):
     await ctx.send('Да я сам охуел')
+
+@bot.command()
+async def exp(stx):
+    response = await db_get_exp(stx)
+    await stx.send(f'У {stx.author.mention} {response} exp')
+    embed = disnake.Embed(
+    title=f"Количество опыта {stx.author.mention}",
+    description=f"Количество опыта {stx.author.mention}",
+    color=disnake.Colour.yellow(),
+    timestamp=datetime.datetime.now())
+    embed.set_footer(
+    text="Футер эмбеда",
+    icon_url="https://disnake.dev/assets/disnake-logo.png")#хуйня для бота и когда
+    embed.set_thumbnail(url="https://disnake.dev/assets/disnake-logo.png")#хуйня значок пользователя
+
+    await stx.send(embed=embed)
+
+    
+
 
 my_console.start()
 bot.run(config.token)
