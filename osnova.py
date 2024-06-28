@@ -132,13 +132,7 @@ async def delete(ctx, content):
                 await ctx.channel.purge(limit=1)    
 
 @bot.command()
-async def fff(stx,   member: disnake.Member = None):
-    if member == None:
-        await stx.send(f"{stx.author.mention} Ты конченный нахуй? ДОЛБАЕБ ВЫЗОВИ ДРУГОГО, ИДИОТ НАХУЙ, ЭТО ИГРА НА ДВОИХ! ТЫ ЗАБАНЕН БЛЯТЬ! \n https://youtu.be/K0pQy3oEF0k?si=Uc6ksR3hyhyEyFzN")
-        time = datetime.datetime.now() + datetime.timedelta(seconds=10)
-        await stx.author.timeout(until=time, reason="ДОЛБАЕБ")
-        return
-    view = View()
+async def fff(stx, member: disnake.Member = None):
     embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!', description='fff')
     embedfff.add_field(name='1 player', value=f'{stx.author}')
     embedfff.add_field(name='2 player', value=f'{member}')
