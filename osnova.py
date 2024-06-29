@@ -186,6 +186,7 @@ class Shoulin(disnake.ui.View):
             embed = disnake.Embed(
                 title='Ничья'
             )
+            return embed
         elif self.player1_pick == 'paper' and self.player2_pick == 'rock':
             embed = disnake.Embed(
                 title= 'Результы'
