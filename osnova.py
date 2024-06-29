@@ -1,17 +1,22 @@
 import disnake
 # import pytube
 from asyncio import sleep
+
+import disnake.ext.commands
 import config
 
 from db import *
 import datetime
+from typing import Optional
 from openpyxl import Workbook
 from dpyConsole import Console
 from disnake.ui import Button, View
 from discord_webhook import DiscordWebhook, DiscordEmbed 
 from disnake.voice_client import VoiceClient
 from disnake.ext import commands 
-from disnake.utils import get 
+from disnake.utils import get
+
+import disnake.ext 
 
 
 #Переменные необходимые в коде, для его сокращения.
@@ -131,39 +136,126 @@ async def delete(ctx, content):
                 await sleep(3)
                 await ctx.channel.purge(limit=1)    
 
-@bot.command()
-async def fff(stx, member: disnake.Member = None):
-    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!', description='fff')
-    embedfff.add_field(name='1 player', value=f'{stx.author}')
-    embedfff.add_field(name='2 player', value=f'{member}')
-    buttonStone = Button(label='Камень', style=disnake.ButtonStyle.primary)
-    buttonScissors = Button(label='Ножницы', style=disnake.ButtonStyle.primary)
-    buttonPaper = Button(label='Бумага', style=disnake.ButtonStyle.primary)
-    view = View()
-    view.add_item(buttonStone)
-    view.add_item(buttonScissors)
-    view.add_item(buttonPaper)
-    await stx.send(embed=embedfff)
-    await stx.send(view=view)
+class Shoulin(disnake.ui.View):
+    def __init__(self, player1, player2 = None, embed = None):
+        super().__init__(timeout=15.0)
+        self.value: Optional[bool] = None
+        self.player1: int = player1
+        self.player2: int = player2
+        self.player1_pick: str = None
+        self.player2_pick: str = None
+        self.embed: disnake.Embed = embed
+        
+    @disnake.ui.button(label='Камень', style=disnake.ButtonStyle.primary)
+    async def vivod_texta(self,button:disnake.Button,interaction:disnake.Interaction):
+        if self.player2 == None and interaction.author.id != self.player1:
+            self.player2 = interaction.author.id
+        if interaction.author.id == self.player1:
+            self.player1_pick = 'rock'
+        elif interaction.author.id == self.player2:
+            self.player2_pick = 'rock'
+        if self.player1_pick != None and self.player2_pick != None:
+            embed = await self.winner()
+            await interaction.response.edit_message(embed=embed, view=None)
+    @disnake.ui.button(label='Ножницы', style=disnake.ButtonStyle.primary)
+    async def vivod_texta2(self,button:disnake.Button,interaction:disnake.Interaction):
+        if self.player2 == None and interaction.author.id != self.player1:
+            self.player2 = interaction.author.id
+        if interaction.author.id == self.player1:
+            self.player1_pick = 'scissors'
+        elif interaction.author.id == self.player2:
+            self.player2_pick = 'scissors'
+        if self.player1_pick != None and self.player2_pick != None:
+            embed = await self.winner()
+            await interaction.response.edit_message(embed=embed, view=None)
     
-@bot.slash_command(name ='ебатьслешкоманда')
-async def ebat(ctx):
+    @disnake.ui.button(label='Бумага', style=disnake.ButtonStyle.primary)
+    async def vivod_texta3(self,button:disnake.Button,interaction:disnake.Interaction):
+        if self.player2 == None and interaction.author.id != self.player1:
+            self.player2 = interaction.author.id
+        if interaction.author.id == self.player1:
+            self.player1_pick = 'paper'
+        elif interaction.author.id == self.player2:
+            self.player2_pick = 'paper'
+        if self.player1_pick != None and self.player2_pick != None:
+            embed = await self.winner()
+            await interaction.response.edit_message(embed=embed, view=None)
+
+    async def winner(self):
+        if self.player1_pick == self.player2_pick:
+            embed = disnake.Embed(
+                title='Ничья'
+            )
+        elif self.player1_pick == 'paper' and self.player2_pick == 'rock':
+            embed = disnake.Embed(
+                title= 'Результы'
+            )
+            embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
+            embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name='Выбор', value= self.player2_pick)
+            return embed
+        elif self.player1_pick == 'rock' and self.player2_pick == 'scissors':
+            embed = disnake.Embed(
+                title= 'Результы'
+            )
+            embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
+            embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name='Выбор', value= self.player2_pick)
+            return embed
+        elif self.player1_pick == 'scissors' and self.player2_pick == 'paper':
+            embed = disnake.Embed(
+                title= 'Результы'
+            )
+            embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
+            embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name='Выбор', value= self.player2_pick)
+            return embed
+        else:
+            embed = disnake.Embed(
+                title= 'Результы'
+            )
+            embed.add_field(name='Победитель', value= bot.get_user(self.player2).global_name)
+            embed.add_field(name='Проигравший', value= bot.get_user(self.player1).global_name)
+            embed.add_field(name='Выбор', value= self.player2_pick, inline=False)
+            embed.add_field(name='Выбор', value= self.player1_pick)
+            return embed
+
+#проверку чтоб бота не звали сделать 
+@bot.command()
+async def fff(stx: disnake.ext.commands.context.Context, member: disnake.member.Member = None):
+    # if hasattr(member, 'bot'):
+    #     await stx.send('Bee не хочет играть')
+    #     return
+    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!')
+    embedfff.add_field(name='1 player', value=f'{stx.author.global_name}')
+    if member != None:
+        embedfff.add_field(name='2 player', value=f'{member.global_name}')
+        view = Shoulin(stx.author.id, member.id, embedfff)
+        await stx.send(embed=embedfff,view=view)
+    else:
+        embedfff.add_field(name='2 player', value=None)
+        view = Shoulin(stx.author.id, None, embedfff)
+        await stx.send(embed=embedfff,view=view)
+    
+@bot.slash_command(name ='слешкоманда')
+async def ebattt(ctx):
     await ctx.send('Да я сам охуел')
 
 @bot.command()
-async def exp(stx):
+async def exp(stx: disnake.ext.commands.context.Context):
     response = await db_get_exp(stx)
-    await stx.send(f'У {stx.author.mention} {response} exp')
     embed = disnake.Embed(
-    title=f"Количество опыта {stx.author.mention}",
-    description=f"Количество опыта {stx.author.mention}",
-    color=disnake.Colour.yellow(),
-    timestamp=datetime.datetime.now())
-    embed.set_footer(
-    text="Футер эмбеда",
-    icon_url="https://disnake.dev/assets/disnake-logo.png")#хуйня для бота и когда
-    embed.set_thumbnail(url="https://disnake.dev/assets/disnake-logo.png")#хуйня значок пользователя
-
+        description = f"Количество опыта: {response}",
+        color = disnake.Colour.yellow(),
+        timestamp = datetime.datetime.now()
+    )
+    embed.set_author(
+        name = stx.author.global_name,
+        icon_url = stx.author.avatar.url
+    )
     await stx.send(embed=embed)
 
     
