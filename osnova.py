@@ -62,11 +62,21 @@ async def log(message: disnake.Message):
 
 @bot.event
 async def on_message(message: disnake.Message):
+    print(datetime.datetime.now().strftime("%H:%M"))
+    print(type(datetime.datetime.now().strftime("%H:%M")))
+    print(message.content)
+    print(type(message.content))
     if message.webhook_id is not None:
         return
     await bot.process_commands(message)
     await log(message)
-    await db_add_exp(message)
+    # await db_add_exp(message)
+    if message.content == datetime.datetime.now().strftime("%H:%M"):
+       await message.author.send("НА КОЙ ХУЙ МНЕ ЭТО ИНФОРМАЦИЯ ДОЛБАЕБ БЛЯТЬ? \n https://youtu.be/p-1rcuGn07s?si=kKgRxxXZUOOtt5Xu")
+       time = datetime.datetime.now() + datetime.timedelta(seconds=94)
+       await message.author.timeout(until=time)
+       
+        
 
 
 # @bot.command()
@@ -118,7 +128,14 @@ async def remove(ctx, rolename, member: disnake.Member = None):
     role = get(ctx.guild.roles, name=rolename)
     await member.remove_roles(role)
     await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
-    
+
+@bot.command()
+async def hey(ctx):
+    await ctx.author.send(f"{ctx.author.mention}Ты конченный нахуй? ДОЛБАЕБ ВЫЗОВИ ДРУГОГО, ИДИОТ НАХУЙ, ЭТО ИГРА НА ДВОИХ! ТЫ ЗАБАНЕН БЛЯТЬ! https://youtu.be/K0pQy3oEF0k?si=Uc6ksR3hyhyEyFzN") 
+
+
+
+
 #удаление сообщений посредством ввода аргумента как число, так и слова все или алл как угодно  
 @bot.command()
 async def delete(ctx, content):
@@ -259,7 +276,7 @@ async def exp(stx: disnake.ext.commands.context.Context):
     )
     await stx.send(embed=embed)
 
-    
+
 
 
 my_console.start()
