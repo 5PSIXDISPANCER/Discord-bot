@@ -26,16 +26,87 @@ my_console = Console(bot)
 
 @bot.event
 async def on_guild_join(guild: disnake.Guild):
-    print(f'Bee прилетел на {guild.name}')
     await db_add_guild(guild)
 
-# @my_console.command()
-# async def resdb():
-#     print('Are you sure? Y/N')
-#     a = await input().lower()
-#     if a == 'y':
-#         print('DB reset starting')
-#         await dblogging(bot)   
+class AdminCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command()
+    async def delete(self, ctx, content):
+            if content.isdigit() == True:   
+                content = int(content)
+                await ctx.channel.purge(limit=content)
+                await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                await sleep(3)
+                await ctx.channel.purge(limit=1)
+            elif content.isalpha():
+                content = str(content.lower())
+                if content == "all" or content == "все":
+                    await ctx.channel.purge(limit=100)
+                    await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                    await sleep(3)
+                    await ctx.channel.purge(limit=1)
+
+    @commands.command()
+    async def remove(self, ctx, rolename, member: disnake.Member = None):
+        if member is None:
+            member = ctx.author
+        role = get(ctx.guild.roles, name=rolename)
+        await member.remove_roles(role)
+        await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
+
+    @commands.command()
+    async def give(self, ctx, rolename, member: disnake.Member = None):
+        if member is None:
+            member = ctx.author
+        role = get(ctx.guild.roles, name=rolename)
+        await member.add_roles(role)
+        await ctx.send(f'Роль {rolename} выдана {member.global_name}') 
+
+class ExpEvents(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def exp(self, stx: disnake.ext.commands.context.Context):
+        response = await db_get_exp(stx)
+        embed = disnake.Embed(
+            description = f"Количество опыта: {response}",
+            color = disnake.Colour.yellow(),
+            timestamp = datetime.datetime.now()
+        )
+        embed.set_author(
+            name = stx.author.global_name,
+            icon_url = stx.author.avatar.url
+        )
+        await stx.send(embed=embed)
+    @commands.command()
+    async def hello(self, ctx):
+        await ctx.send(f'Hello ... This feels familiar.')
+    
+class MiniGames(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    #проверку чтоб бота не звали сделать 
+    @commands.command()
+    async def fff(self, stx: disnake.ext.commands.context.Context, member: disnake.member.Member = None):
+        # if hasattr(member, 'bot'):
+        #     await stx.send('Bee не хочет играть')
+        #     return
+        embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!')
+        embedfff.add_field(name='1 player', value=f'{stx.author.global_name}')
+        if member != None:
+            embedfff.add_field(name='2 player', value=f'{member.global_name}')
+            view = Shoulin(stx.author.id, member.id, embedfff)
+            await stx.send(embed=embedfff,view=view)
+        else:
+            embedfff.add_field(name='2 player', value=None)
+            view = Shoulin(stx.author.id, None, embedfff)
+            await stx.send(embed=embedfff,view=view)
+
+
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: disnake.Message):
     now = datetime.datetime.now()
@@ -62,27 +133,12 @@ async def log(message: disnake.Message):
 
 @bot.event
 async def on_message(message: disnake.Message):
-    print(datetime.datetime.now().strftime("%H:%M"))
-    print(type(datetime.datetime.now().strftime("%H:%M")))
-    print(message.content)
-    print(type(message.content))
     if message.webhook_id is not None:
         return
     await bot.process_commands(message)
     await log(message)
-    # await db_add_exp(message)
-    if message.content == datetime.datetime.now().strftime("%H:%M"):
-       await message.author.send("НА КОЙ ХУЙ МНЕ ЭТО ИНФОРМАЦИЯ ДОЛБАЕБ БЛЯТЬ? \n https://youtu.be/p-1rcuGn07s?si=kKgRxxXZUOOtt5Xu")
-       time = datetime.datetime.now() + datetime.timedelta(seconds=94)
-       await message.author.timeout(until=time)
-       
-        
+    await db_add_exp(message)
 
-
-# @bot.command()
-# async def exp(ctx):
-#     response = await db_get_exp(ctx)
-#     await ctx.send(f'У {ctx.author.mention} {response} exp')
 
 @bot.command()
 async def logs(ctx):
@@ -106,52 +162,6 @@ async def ping(stx):
     book.save('parser.xlsx')
     book.close
     await stx.send(file = disnake.File(r'parser.xlsx'))
-
-@bot.command(description="Sends the bot's latency.")
-async def poshel(stx):
-    await stx.send(bot.guilds[0].members[0].default_avatar)
-
-# Выдать роль
-@bot.command()
-async def give(ctx,rolename, member: disnake.Member = None):
-    if member is None:
-        member = ctx.author
-    role = get(ctx.guild.roles, name=rolename)
-    await member.add_roles(role)
-    await ctx.send(f'Роль {rolename} выдана {member.global_name}')
-
-# Убрать роль
-@bot.command()
-async def remove(ctx, rolename, member: disnake.Member = None):
-    if member is None:
-        member = ctx.author
-    role = get(ctx.guild.roles, name=rolename)
-    await member.remove_roles(role)
-    await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
-
-@bot.command()
-async def hey(ctx):
-    await ctx.author.send(f"{ctx.author.mention}Ты конченный нахуй? ДОЛБАЕБ ВЫЗОВИ ДРУГОГО, ИДИОТ НАХУЙ, ЭТО ИГРА НА ДВОИХ! ТЫ ЗАБАНЕН БЛЯТЬ! https://youtu.be/K0pQy3oEF0k?si=Uc6ksR3hyhyEyFzN") 
-
-
-
-
-#удаление сообщений посредством ввода аргумента как число, так и слова все или алл как угодно  
-@bot.command()
-async def delete(ctx, content):
-        if content.isdigit() == True:   
-            content = int(content)
-            await ctx.channel.purge(limit=content)
-            await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
-            await sleep(3)
-            await ctx.channel.purge(limit=1)
-        elif content.isalpha():
-              content = str(content.lower())
-              if content == "all" or content == "все":
-                await ctx.channel.purge(limit=100)
-                await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
-                await sleep(3)
-                await ctx.channel.purge(limit=1)    
 
 class Shoulin(disnake.ui.View):
     def __init__(self, player1, player2 = None, embed = None):
@@ -210,8 +220,7 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name=" ", value=" ", inline=False)
-            embed.add_field(name='Выбор', value= self.player1_pick)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         elif self.player1_pick == 'rock' and self.player2_pick == 'scissors':
@@ -220,8 +229,7 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name=" ", value=" ", inline=False)
-            embed.add_field(name='Выбор', value= self.player1_pick)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         elif self.player1_pick == 'scissors' and self.player2_pick == 'paper':
@@ -230,8 +238,7 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name=" ", value=" ", inline=False)
-            embed.add_field(name='Выбор', value= self.player1_pick)
+            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         else:
@@ -240,48 +247,14 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player2).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player1).global_name)
-            embed.add_field(name=" ", value=" ", inline=False)
-            embed.add_field(name='Выбор', value= self.player2_pick)
+            embed.add_field(name='Выбор', value= self.player2_pick, inline=False)
             embed.add_field(name='Выбор', value= self.player1_pick)
             return embed
 
-#проверку чтоб бота не звали сделать 
-@bot.command()
-async def fff(stx: disnake.ext.commands.context.Context, member: disnake.member.Member = None):
-    # if hasattr(member, 'bot'):
-    #     await stx.send('Bee не хочет играть')
-    #     return
-    embedfff = disnake.Embed(title='Игра началась, дети поставлены, ставок БОЛЬШЕ НЕТ!')
-    embedfff.add_field(name='1 player', value=f'{stx.author.global_name}')
-    if member != None:
-        embedfff.add_field(name='2 player', value=f'{member.global_name}')
-        view = Shoulin(stx.author.id, member.id, embedfff)
-        await stx.send(embed=embedfff,view=view)
-    else:
-        embedfff.add_field(name='2 player', value=None)
-        view = Shoulin(stx.author.id, None, embedfff)
-        await stx.send(embed=embedfff,view=view)
-    
-@bot.slash_command(name ='слешкоманда')
-async def ebattt(ctx):
-    await ctx.send('Да я сам охуел')
 
-@bot.command()
-async def exp(stx: disnake.ext.commands.context.Context):
-    response = await db_get_exp(stx)
-    embed = disnake.Embed(
-        description = f"Количество опыта: {response}",
-        color = disnake.Colour.yellow(),
-        timestamp = datetime.datetime.now()
-    )
-    embed.set_author(
-        name = stx.author.global_name,
-        icon_url = stx.author.avatar.url
-    )
-    await stx.send(embed=embed)
-
-
-
+bot.add_cog(ExpEvents(bot))
+bot.add_cog(MiniGames(bot))
+bot.add_cog(AdminCommands(bot))
 
 my_console.start()
 bot.run(config.token)
