@@ -220,7 +220,8 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name=' ', value=' ', inline=False)
+            embed.add_field(name='Выбор', value= self.player1_pick)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         elif self.player1_pick == 'rock' and self.player2_pick == 'scissors':
@@ -229,7 +230,8 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name=' ', value= ' ', inline=False)
+            embed.add_field(name='Выбор', value= self.player1_pick)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         elif self.player1_pick == 'scissors' and self.player2_pick == 'paper':
@@ -238,7 +240,8 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player1).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player2).global_name)
-            embed.add_field(name='Выбор', value= self.player1_pick, inline=False)
+            embed.add_field(name=' ', value=' ', inline=False)
+            embed.add_field(name='Выбор', value= self.player1_pick)
             embed.add_field(name='Выбор', value= self.player2_pick)
             return embed
         else:
@@ -247,7 +250,8 @@ class Shoulin(disnake.ui.View):
             )
             embed.add_field(name='Победитель', value= bot.get_user(self.player2).global_name)
             embed.add_field(name='Проигравший', value= bot.get_user(self.player1).global_name)
-            embed.add_field(name='Выбор', value= self.player2_pick, inline=False)
+            embed.add_field(name=' ', value= ' ', inline=False)
+            embed.add_field(name='Выбор', value= self.player2_pick)
             embed.add_field(name='Выбор', value= self.player1_pick)
             return embed
 
