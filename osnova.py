@@ -32,7 +32,9 @@ class AdminCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.slash_command()
+    @commands.slash_command(
+             description="Удаление сообщений. Либо кол-во сообщений  или слово все (русский или английский язык)"
+    )
     async def delete(self, interaction, content):
             if content.isdigit() == True:   
                 content = int(content)
@@ -48,19 +50,25 @@ class AdminCommands(commands.Cog):
                     await sleep(3)
                     await interaction.channel.purge(limit=1)
 
-    @commands.slash_command()
+    @commands.slash_command(
+            description="Снятие роли"
+    )
     async def remove(self, interaction, member: disnake.Member, role: str ):
         role = get(interaction.guild.roles, name=role)
         await member.remove_roles(role)
         await interaction.response.send_message(f'Роль {role} убрана у {member.mention}')
 
-    @commands.slash_command()
+    @commands.slash_command(
+            description="Добавление роли"
+    )
     async def give(self, interaction, member: disnake.Member, role: str):
         role = get(interaction.guild.roles, name=role)
         await member.add_roles(role)
         await interaction.response.send_message(f'Роль {role} выдана {member.mention}')
 
-    @commands.slash_command()
+    @commands.slash_command(
+            description="Выдача таймаута. Переменная чек принимает меру исчисления s-seconds и т.д"
+    )
     async def timeout(self, interaction, member: disnake.Member, time: int, check: str, reason: str):
         if check == "m" or check.lower() == "minutes":
             time = datetime.datetime.now() + datetime.timedelta(minutes=time)
