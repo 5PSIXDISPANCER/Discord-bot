@@ -4,7 +4,7 @@ from asyncio import sleep
 
 import disnake.ext.commands
 import config
-import os
+import for_games
 from db import *
 import datetime
 from typing import Optional
@@ -132,6 +132,20 @@ class MiniGames(commands.Cog):
             view = Shoulin(stx.author.id, None, embedfff)
             await stx.send(embed=embedfff,view=view)
 
+    @commands.slash_command()
+    async def bull(self, interaction, member: disnake.Member):
+        embedbull = disnake.Embed(colour=red , title='Игра в быка', description=for_games.bull)
+        embedbull.set_thumbnail(url="https://media.tproger.ru/uploads/2017/03/byk.png")
+        embedbull.add_field(name='1 player', value=f'{interaction.author.global_name}')
+        if member != None:
+            embedbull.add_field(name='2 player', value=f'{member.global_name}')
+            view = Shoulin(interaction.author.id, member.id, embedbull)
+            await interaction.send(embed=embedbull,view=view)
+        else:
+            embedbull.add_field(name='2 player', value=None)
+            view = Shoulin(interaction.author.id, None, embedbull)
+            await interaction.send(embed=embedbull,view=view)        
+
 
 #логирование сообщений, первая часть кода логирует в файл в более краткой форме, вторая часть логирует в файл и в #log
 async def log(message: disnake.Message):
@@ -188,6 +202,8 @@ async def ping(stx):
     book.save('parser.xlsx')
     book.close
     await stx.send(file = disnake.File(r'parser.xlsx'))
+
+    
 
 class Shoulin(disnake.ui.View):
     def __init__(self, player1, player2 = None, embed = None):
@@ -280,6 +296,9 @@ class Shoulin(disnake.ui.View):
             embed.add_field(name='Выбор', value= self.player2_pick)
             embed.add_field(name='Выбор', value= self.player1_pick)
             return embed
+
+
+
 
 bot.load_extensions("cogs")
 bot.add_cog(ExpEvents(bot))
