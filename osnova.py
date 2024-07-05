@@ -21,7 +21,7 @@ import disnake.ext
 
 #Переменные необходимые в коде, для его сокращения.
 intents = disnake.Intents().all() #разрешения
-bot = commands.Bot(command_prefix=config.prefix, intents=intents) #префикс команд и разрешения
+bot = commands.Bot(command_prefix=config.prefix, intents=intents, test_guilds=[1232407034108973186]) #префикс команд и разрешения
 my_console = Console(bot)
 
 @bot.event
@@ -31,38 +31,56 @@ async def on_guild_join(guild: disnake.Guild):
 class AdminCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.command()
-    async def delete(self, ctx, content):
+
+    @commands.slash_command()
+    async def delete(self, interaction, content):
             if content.isdigit() == True:   
                 content = int(content)
-                await ctx.channel.purge(limit=content)
-                await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                await interaction.channel.purge(limit=content)
+                await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention))
                 await sleep(3)
-                await ctx.channel.purge(limit=1)
+                await interaction.channel.purge(limit=1)
             elif content.isalpha():
                 content = str(content.lower())
                 if content == "all" or content == "все":
-                    await ctx.channel.purge(limit=100)
-                    await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                    await interaction.chan(limit=100)
+                    await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention))
                     await sleep(3)
-                    await ctx.channel.purge(limit=1)
+                    await interaction.channel.purge(limit=1)
 
-    @commands.command()
-    async def remove(self, ctx, rolename, member: disnake.Member = None):
-        if member is None:
-            member = ctx.author
-        role = get(ctx.guild.roles, name=rolename)
+    @commands.slash_command()
+    async def remove(self, interaction, member: disnake.Member, role: str ):
+        role = get(interaction.guild.roles, name=role)
         await member.remove_roles(role)
-        await ctx.send(f'Роль {rolename} убрана у {member.global_name}')
+        await interaction.response.send_message(f'Роль {role} убрана у {member.mention}')
 
-    @commands.command()
-    async def give(self, ctx, rolename, member: disnake.Member = None):
-        if member is None:
-            member = ctx.author
-        role = get(ctx.guild.roles, name=rolename)
+    @commands.slash_command()
+    async def give(self, interaction, member: disnake.Member, role: str):
+        role = get(interaction.guild.roles, name=role)
         await member.add_roles(role)
-        await ctx.send(f'Роль {rolename} выдана {member.global_name}') 
+        await interaction.response.send_message(f'Роль {role} выдана {member.mention}')
+
+    @commands.slash_command()
+    async def timeout(self, interaction, member: disnake.Member, time: int, check: str, reason: str):
+        if check == "m" or check.lower() == "minutes":
+            time = datetime.datetime.now() + datetime.timedelta(minutes=time)
+
+        elif check == "s"  or check.lower() == "seconds":
+            time = datetime.datetime.now() + datetime.timedelta(seconds=time)
+
+        elif check == "h"  or check.lower() == "hours":
+            time = datetime.datetime.now() + datetime.timedelta(hours=time)
+
+        elif check == "d"  or check.lower() == "days":
+            time = datetime.datetime.now() + datetime.timedelta(days=time)
+
+        elif check == "w"  or check.lower() == "weeks":
+            time = datetime.datetime.now() + datetime.timedelta(weeks=time)
+        await member.timeout(until=time, reason=reason)
+        await interaction.response.send_message(f"Пользователь {member.mention} был затайм-аутен до {time.strftime('%H:%M:%S %d.%m.%Y')}")    
+            
+        
+
 
 class ExpEvents(commands.Cog):
     def __init__(self, bot):
@@ -259,6 +277,7 @@ class Shoulin(disnake.ui.View):
 bot.add_cog(ExpEvents(bot))
 bot.add_cog(MiniGames(bot))
 bot.add_cog(AdminCommands(bot))
+
 
 my_console.start()
 bot.run(config.token)
