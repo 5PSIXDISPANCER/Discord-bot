@@ -32,5 +32,5 @@ class ExpEvents(commands.Cog):
         await ctx.send(f'Hello ... This feels familiar.')
 
 
-def setup(bot: commands.Bot):
-    bot.add_cog(ExpEvents(bot))
+def setup(bot):
+    bot.add_cog(ExpEvents(bot))      
