@@ -47,9 +47,6 @@ class ExpEvents(commands.Cog):
             icon_url = stx.author.avatar.url
         )
         await stx.send(embed=embed)
-    @commands.command()
-    async def hello(self, ctx):
-        await ctx.send(f'Hello ... This feels familiar.')
     
 class MiniGames(commands.Cog):
     def __init__(self, bot):
@@ -74,7 +71,7 @@ class MiniGames(commands.Cog):
 
     @commands.slash_command()
     async def bull(self, interaction, member: disnake.Member):
-        embedbull = disnake.Embed(colour=red , title='Игра в быка', description=for_games.bull)
+        embedbull = disnake.Embed(colour='red' , title='Игра в быка', description=for_games.bull)
         embedbull.set_thumbnail(url="https://media.tproger.ru/uploads/2017/03/byk.png")
         embedbull.add_field(name='1 player', value=f'{interaction.author.global_name}')
         if member != None:
