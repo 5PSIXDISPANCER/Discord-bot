@@ -14,41 +14,41 @@ class AdminCommands_slash(commands.Cog):
     @commands.slash_command(
              description="Удаление сообщений. Либо кол-во сообщений  или слово все (русский или английский язык)"
     )
-    async def delete(self, interaction, content):
+    async def delete(self, interaction, content, hide: bool):
             if content.isdigit() == True:   
                 content = int(content)
                 await interaction.channel.purge(limit=content)
-                await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=False)
+                await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=hide)
                 await sleep(3)
                 await interaction.channel.purge(limit=1)
             elif content.isalpha():
                 content = str(content.lower())
                 if content == "all" or content == "все":
                     await interaction.channel.purge(limit=100)
-                    await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=False)
+                    await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=hide)
                     await sleep(3)
                     await interaction.channel.purge(limit=1)
 
     @commands.slash_command(
             description="Снятие роли"
     )
-    async def remove(self, interaction, member: disnake.Member, role: str ):
+    async def remove(self, interaction, member: disnake.Member, role: str, hide: bool):
         role = get(interaction.guild.roles, name=role)
         await member.remove_roles(role)
-        await interaction.response.send_message(f'Роль {role} убрана у {member.mention}', ephemeral=False)
+        await interaction.response.send_message(f'Роль {role} убрана у {member.mention}', ephemeral=hide)
 
     @commands.slash_command(
             description="Добавление роли"
     )
-    async def give(self, interaction, member: disnake.Member, role: str):
+    async def give(self, interaction, member: disnake.Member, role: str, hide: bool):
         role = get(interaction.guild.roles, name=role)
         await member.add_roles(role)
-        await interaction.response.send_message(f'Роль {role} выдана {member.mention}', ephemeral=False)
+        await interaction.response.send_message(f'Роль {role} выдана {member.mention}', ephemeral=hide)
 
     @commands.slash_command(
-            description="Выдача таймаута. Переменная чек принимает меру исчисления (s)econds и т.д"
+            description="Выдача таймаута, переменная чек принимает меру исчисления (s)econds и т.д."
     )
-    async def timeout(self, interaction, member: disnake.Member, time: int, check: str, reason: str):
+    async def timeout(self, interaction, member: disnake.Member, time: int, check: str, reason: str, hide: bool):
         if check == "m" or check.lower() == "minutes":
             time = datetime.datetime.now() + datetime.timedelta(minutes=time)
 
@@ -64,29 +64,42 @@ class AdminCommands_slash(commands.Cog):
         elif check == "w"  or check.lower() == "weeks":
             time = datetime.datetime.now() + datetime.timedelta(weeks=time)
         await member.timeout(until=time, reason=reason)
-        await interaction.response.send_message(f"Пользователь {member.mention} был затайм-аутен до {time.strftime('%H:%M:%S %d.%m.%Y')}",ephemeral=False)
+        await interaction.response.send_message(f"Пользователь {member.mention} был затайм-аутен до {time.strftime('%H:%M:%S %d.%m.%Y')}",ephemeral=hide)
 
     @commands.slash_command(
             description="Снятие таймаута"
     )
-    async def untimeout(self, interaction, member: disnake.Member):
+    async def untimeout(self, interaction, member: disnake.Member, hide: bool):
         await member.timeout(until=None, reason=None)
-        await interaction.response.send_message(f"Пользователь {member.mention} был разтайм-аутен", ephemeral=False)    
+        await interaction.response.send_message(f"Пользователь {member.mention} был разтайм-аутен", ephemeral=hide)    
 
     @commands.slash_command(
             description="Бан с причиной"
     )  
-    async def ban(self, interaction, member: disnake.Member, reason: str):
+    async def ban(self, interaction, member: disnake.Member, reason: str, hide: bool):
         await interaction.guild.ban(member, reason=reason)
-        await interaction.response.send_message(f"Пользователь {member.mention} был забанен по причине: {reason}", ephemeral=False)  
+        await interaction.response.send_message(f"Пользователь {member.mention} был забанен по причине: {reason}", ephemeral=hide)  
+
+    @commands.slash_command(
+        description="Бан пользователя дискорда, если его нет на сервере"
+    )       
+    async def forceban(self, interaction, member: disnake.User, hide: bool):
+        await interaction.guild.unban(member) 
+        await interaction.response.send_message(f"Пользователь {member.mention} был забанен", ephemeral=hide)
 
     @commands.slash_command(
             description="Снятие бана"
     )  
-    async def unban(self, interaction, member: disnake.User):
+    async def unban(self, interaction, member: disnake.User, hide: bool):
         await interaction.guild.unban(member) 
-        await interaction.response.send_message(f"Пользователь {member.mention} был разбанен.", ephemeral=False)
-        
+        await interaction.response.send_message(f"Пользователь {member.mention} был разбанен", ephemeral=hide)
+
+    @commands.slash_command(
+        description="Возвращение id участника"
+    )  
+    async def get_member_id(self, interaction, member: disnake.User, hide: bool):
+        await interaction.response.send_message(f"ID пользователя  {member.id}", ephemeral=hide)
+
 
 class AdminCommands(commands.Cog):
     def __init__(self, bot):
@@ -123,7 +136,7 @@ class AdminCommands(commands.Cog):
         role = get(ctx.guild.roles, name=rolename)
         await member.add_roles(role)
         await ctx.send(f'Роль {rolename} выдана {member.global_name}') 
-
+    
     @commands.command()    
     async def timeout(self, ctx, member: disnake.Member, time: int, check: str, reason: str):
         if check == "m" or check.lower() == "minutes":
@@ -154,9 +167,21 @@ class AdminCommands(commands.Cog):
         await ctx.send(f"Пользователь {member.mention} был забанен по причине: {reason}")  
 
     @commands.command()
+    async def forceban(ctx, member: disnake.User, reason: str):
+        await ctx.guild.ban(member, reason=reason)
+        await ctx.send(f"Пользователь {member.mention} был забанен по причине: {reason}")  
+
+    @commands.command()
     async def unban(self, ctx, member: disnake.User):
         await ctx.guild.unban(member) 
-        await ctx.sende(f"Пользователь {member.mention} был разбанен.")
+        await ctx.send(f"Пользователь {member.mention} был разбанен.")
+
+    @commands.command()
+    async def get_member_id(self, ctx, member: disnake.User):
+        await ctx.author.send(member.id)
+        
+        
+        
 
 
 
