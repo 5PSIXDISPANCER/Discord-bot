@@ -1,18 +1,28 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import path from 'path'
 
 const PORT = 5000
-const DB_URL = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6'
-
+// const DB_URL = 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6'
 const app = express()
-app.use( express.static('homepage'))
+const __dirname = process.cwd();
+
+const createPage = (page) => path.resolve(__dirname, 'pages', `${page}.html`)
+
+app.use(express.static('styles'))
+app.use(express.static('scripts'))
+
 app.get('/', (req, res)=>{
-    res.send()
+    res.sendFile(createPage('index'))
+})
+
+app.get('/list', (req, res)=>{
+    res.send('[fff,sss,ddd]')
 })
 
 async function startApp(){
     try{
-        await mongoose.connect(DB_URL)
+        // await mongoose.connect(DB_URL)
         app.listen(PORT, ()=>{console.log('Server stared on port ' + PORT)})
     }catch(e){
         console.log(e)
