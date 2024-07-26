@@ -11,6 +11,7 @@ const createPage = (page) => path.resolve(__dirname, 'pages', `${page}.html`)
 
 app.use(express.static('styles'))
 app.use(express.static('scripts'))
+app.use(express.static('image'))
 
 app.get('/', (req, res)=>{
     res.sendFile(createPage('index'))
@@ -28,6 +29,12 @@ async function startApp(){
         console.log(e)
     }
 }
+
+app.use((req,res)=>{
+    res
+        .status(404)
+        .sendFile(createPage('error'))
+})
 
 startApp()
 
