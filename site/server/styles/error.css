@@ -1,8 +1,8 @@
 body{
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: gray;
     display: flex;
     align-items: center;
@@ -11,6 +11,8 @@ body{
 pre{
     margin: 0;
     padding: 0;
-    background-color: red;
     text-align: center;
+}
+a{
+    text-decoration: none;
 }
