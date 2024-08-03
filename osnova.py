@@ -234,6 +234,9 @@ class Shoulin(disnake.ui.View):
             embed.add_field(name='Выбор', value= self.player1_pick)
             return embed
 
+class ExpEvents(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
 
 
