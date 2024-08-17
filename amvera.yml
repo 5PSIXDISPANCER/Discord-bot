@@ -6,7 +6,7 @@ meta:
 build:
   requirementsPath: requirements.txt
 run:
-  scriptName: aosnova.py
+  scriptName: osnova.py
   persistenceMount: /data
   containerPort: "80"
   servicePort: "80"
