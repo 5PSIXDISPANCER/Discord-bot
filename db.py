@@ -23,6 +23,7 @@ async def dblogging(bot: commands.Bot):
             request['membersName'] = membersName
             requestArray.append(request)
         coll.insert_many(requestArray)
+    print("База перезапущена")
 
 async def db_add_guild(guild):
     if 'serverList'not in db.list_collection_names():
