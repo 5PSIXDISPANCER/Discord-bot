@@ -18,14 +18,18 @@ class AdminCommands_slash(commands.Cog):
             if content.isdigit() == True:   
                 content = int(content)
                 await interaction.channel.purge(limit=content)
-                await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=hide)
+                await interaction.send(f'Так нахуй, этот уебан удалил: {interaction.author.mention} - ДА ДА ОН!', ephemeral=hide)
+                if hide == True:
+                    return
                 await sleep(3)
                 await interaction.channel.purge(limit=1)
             elif content.isalpha():
                 content = str(content.lower())
                 if content == "all" or content == "все":
                     await interaction.channel.purge(limit=100)
-                    await interaction.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(interaction.author.mention), ephemeral=hide)
+                    await interaction.send(f'Так нахуй, этот уебан удалил: {interaction.author.mention} - ДА ДА ОН!', ephemeral=hide)
+                    if hide == True:
+                      return
                     await sleep(3)
                     await interaction.channel.purge(limit=1)
 
@@ -110,14 +114,14 @@ class AdminCommands(commands.Cog):
             if content.isdigit() == True:   
                 content = int(content)
                 await ctx.channel.purge(limit=content)
-                await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                await ctx.send(f'Так нахуй, этот уебан удалил: {ctx.author.mention} - ДА ДА ОН! ')
                 await sleep(3)
                 await ctx.channel.purge(limit=1)
             elif content.isalpha():
                 content = str(content.lower())
                 if content == "all" or content == "все":
                     await ctx.channel.purge(limit=100)
-                    await ctx.send('Так нахуй, этот уебан удалил, ДА ДА ОН! {}'.format(ctx.author.mention))
+                    await ctx.send(f'Так нахуй, этот уебан удалил: {ctx.author.mention} - ДА ДА ОН! ')
                     await sleep(3)
                     await ctx.channel.purge(limit=1)
 
