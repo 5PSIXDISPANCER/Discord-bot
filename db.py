@@ -52,3 +52,6 @@ async def db_get_exp(ctx):
     
 async def set_log_channel(message: discord.Message):
     coll.update_one({'_id': message.guild.id},{'$set': {'logChannel': int(message.content.split(' ')[1])}})
+
+async def get_info(guildId, znach):
+    return coll.find_one({'_id' :guildId},{znach: 1})[znach]
