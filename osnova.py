@@ -133,7 +133,9 @@ async def ping(stx):
     book.close
     await stx.send(file = disnake.File(r'parser.xlsx'))
 
-    
+@bot.command()
+async def setLogChannel(stx):
+    await set_log_channel(stx.message)   
 
 class Shoulin(disnake.ui.View):
     def __init__(self, player1, player2 = None, embed = None):

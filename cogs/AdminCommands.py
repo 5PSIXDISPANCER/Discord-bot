@@ -4,6 +4,7 @@ import disnake.ext.commands
 import datetime
 from disnake.ext import commands 
 from disnake.utils import get
+import db
 
 import disnake.ext 
 

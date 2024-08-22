@@ -49,3 +49,6 @@ async def db_add_exp(message: discord.Message):
 async def db_get_exp(ctx):
     for value in coll.find({'_id': ctx.guild.id}, {'_id': 0,'membersName': 1}):
         return value['membersName'][ctx.author.name.replace('.', '')]
+    
+async def set_log_channel(message: discord.Message):
+    coll.update_one({'_id': message.guild.id},{'$set': {'logChannel': int(message.content.split(' ')[1])}})
