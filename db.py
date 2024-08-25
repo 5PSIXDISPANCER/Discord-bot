@@ -5,6 +5,9 @@ client = pymongo.MongoClient('mongodb://127.0.0.1:27017/?directConnection=true&s
 db = client.admin
 coll = db.serverList
 
+async def create_db():
+    db = client['admin']
+    coll = db['serverList']
 
 async def dblogging(bot: commands.Bot):
     coll = db.serverList
