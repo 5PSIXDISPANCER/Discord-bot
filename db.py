@@ -2,9 +2,14 @@ import pymongo
 import discord
 from discord.ext import commands 
 client = pymongo.MongoClient('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6')
-db = client.admin
-coll = db.serverList
+db = client['beebot']
+coll = db['serverList']
 
+async def create_db():
+    db = client['beebot']
+    coll = db['serverList']
+    coll.insert_one({'field':'value'})
+    coll.delete_one({'field':'value'})
 
 async def dblogging(bot: commands.Bot):
     coll = db.serverList
@@ -23,6 +28,7 @@ async def dblogging(bot: commands.Bot):
             request['membersName'] = membersName
             requestArray.append(request)
         coll.insert_many(requestArray)
+    print("База перезапущена")
 
 async def db_add_guild(guild):
     if 'serverList'not in db.list_collection_names():

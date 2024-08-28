@@ -29,7 +29,10 @@ my_console = Console(bot)
 async def on_guild_join(guild: disnake.Guild):
     await db_add_guild(guild)
 
-
+@bot.command()
+async def resdb(ctx):
+    await create_db()
+    await dblogging(bot)
         
 class ExpEvents(commands.Cog):
     def __init__(self, bot):
