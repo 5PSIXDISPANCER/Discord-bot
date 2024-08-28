@@ -37,17 +37,18 @@ class ExpEvents(commands.Cog):
 
     @commands.command()
     async def exp(self, stx: disnake.ext.commands.context.Context):
-        response = await db_get_exp(stx)
-        embed = disnake.Embed(
-            description = f"Количество опыта: {response}",
-            color = disnake.Colour.yellow(),
-            timestamp = datetime.datetime.now()
-        )
-        embed.set_author(
-            name = stx.author.global_name,
-            icon_url = stx.author.avatar.url
-        )
-        await stx.send(embed=embed)
+        # response = await db_get_exp(stx)
+        # embed = disnake.Embed(
+        #     description = f"Количество опыта: {response}",
+        #     color = disnake.Colour.yellow(),
+        #     timestamp = datetime.datetime.now()
+        # )
+        # embed.set_author(
+        #     name = stx.author.global_name,
+        #     icon_url = stx.author.avatar.url
+        # )
+        # await stx.send(embed=embed)
+        await stx.send("Привет")
     
 class MiniGames(commands.Cog):
     def __init__(self, bot):
@@ -241,9 +242,7 @@ class Shoulin(disnake.ui.View):
             embed.add_field(name='Выбор', value= self.player1_pick)
             return embed
 
-class ExpEvents(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+
 
 
 

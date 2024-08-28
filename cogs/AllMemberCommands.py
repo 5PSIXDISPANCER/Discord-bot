@@ -14,13 +14,39 @@ class AllMemberCommands_slash(commands.Cog):
     @commands.slash_command(
              description="Команды бота(как на русском, так и на английском языке"
     )
-    async def help(self,interaction ):
-        print("yes")
+    async def info(self, interaction):
 
+        embed = disnake.Embed(
+        title="Заголовок эмбеда",
+        description="Описание эмбеда",
+        color=disnake.Colour.blue(),
+        timestamp=datetime.datetime.now(),
+        )
 
+        embed.set_author(
+        name="Project tw0 ( Bee ) by Beeeee and Mr.Krik",
+        url="https://disnake.dev/",
+        icon_url="https://disnake.dev/assets/disnake-logo.png",
+        )
+        embed.set_footer(
+        text="Права не защищены, пошли нахуй, собственность интеллектуальная, а это мы, а рабство нахуй запрещено уебки.",
+        icon_url="https://disnake.dev/assets/disnake-logo.png",
+        )
 
+        embed.set_thumbnail(url="https://disnake.dev/assets/disnake-logo.png")
+        embed.set_image(url="https://disnake.dev/assets/disnake-thin-banner.png")
 
-# class AllMemberCommands(commands.Cog):
+        embed.add_field(name="Обычный заголовок", value="Обычное значение", inline=False)
+        embed.add_field(name="Встроенный заголовок", value="Встроенное значение", inline=True)
+        embed.add_field(name="Встроенный заголовок", value="Встроенное значение", inline=True)
+        embed.add_field(name="Встроенный заголовок", value="Встроенное значение", inline=True)
+
+        await interaction.send(embed=embed) 
+
+        
+                
+
+# class AllMemberCommands(commands.Cog):                
 #     def __init__(self, bot):
 #         self.bot = bot
     
