@@ -63,7 +63,7 @@ class DataBase(commands.Cog):
         print(message.author.name)
         self.coll.update_one({'_id': message.guild.id}, {'$inc': {f'membersName.{message.author.name.replace('.', '')}': +exp}})
     
-    @commands.command(name='dsfsdfsdfsegh')
+    @commands.command()
     async def db_get_exp(self, ctx: disnake.Message):
         for value in self.coll.find({'_id': ctx.guild.id}, {'_id': 0,'membersName': 1}):
             return value['membersName'][ctx.author.name.replace('.', '')]
