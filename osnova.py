@@ -25,34 +25,6 @@ intents = disnake.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents, test_guilds=[1232407034108973186]) #префикс команд и разрешения
 my_console = Console(bot)
 
-@bot.event
-async def on_guild_join(guild: disnake.Guild):
-    await db_add_guild(guild)
-
-@bot.command()
-async def resdb(ctx):
-    await create_db()
-    await dblogging(bot)
-        
-class ExpEvents(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command()
-    async def exp(self, stx: disnake.ext.commands.context.Context):
-        # response = await db_get_exp(stx)
-        # embed = disnake.Embed(
-        #     description = f"Количество опыта: {response}",
-        #     color = disnake.Colour.yellow(),
-        #     timestamp = datetime.datetime.now()
-        # )
-        # embed.set_author(
-        #     name = stx.author.global_name,
-        #     icon_url = stx.author.avatar.url
-        # )
-        # await stx.send(embed=embed)
-        await stx.send("Привет")
-    
 class MiniGames(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -250,7 +222,6 @@ class Shoulin(disnake.ui.View):
 
 
 bot.load_extensions("cogs")
-bot.add_cog(ExpEvents(bot))
 bot.add_cog(MiniGames(bot))
 
 my_console.start()

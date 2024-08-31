@@ -1,7 +1,7 @@
 import disnake
 import datetime
 from disnake.ext import commands
-from db import *
+import disnake.ext.commands
 import disnake.ext
 
 
@@ -11,12 +11,14 @@ class ExpEvents(commands.Cog):
     
     @commands.Cog.listener()
     async def on_guild_join(self, guild: disnake.Guild):
+        db = self.bot.get_cog('Db')
         print('Join working')
-        await db_add_guild(guild)
+        await db.db_add_guild(guild)
 
     @commands.command()
     async def exp(self, stx: disnake.ext.commands.context.Context):
-        response = await db_get_exp(stx)
+        db = self.bot.get_cog('dbCogs')
+        response = await db.db_get_exp(stx)
         embed = disnake.Embed(
             description = f"Количество опыта: {response}",
             color = disnake.Colour.yellow(),
