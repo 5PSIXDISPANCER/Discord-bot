@@ -84,10 +84,6 @@ async def ping(stx):
     await stx.send(file = disnake.File(r'parser.xlsx'))
 
 @bot.command()
-async def test(ctx):
-    await get_info(ctx.message.guild.id, 'logChannel')
-
-@bot.command()
 async def setLogChannel(stx):
     await set_log_channel(stx.message)   
 
