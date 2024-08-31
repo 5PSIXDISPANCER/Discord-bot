@@ -11,13 +11,13 @@ class ExpEvents(commands.Cog):
     
     @commands.Cog.listener()
     async def on_guild_join(self, guild: disnake.Guild):
-        db = self.bot.get_cog('Db')
+        db = self.bot.get_cog('DataBase')
         print('Join working')
         await db.db_add_guild(guild)
 
     @commands.command()
     async def exp(self, stx: disnake.ext.commands.context.Context):
-        db = self.bot.get_cog('dbCogs')
+        db = self.bot.get_cog('DataBase')
         response = await db.db_get_exp(stx)
         embed = disnake.Embed(
             description = f"Количество опыта: {response}",
