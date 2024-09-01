@@ -53,7 +53,11 @@ class DataBase(commands.Cog):
             request['membersName'] = membersName
             self.coll.insert_one(request)
 
-    @commands.command()
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        await self.db_add_exp(message)
+
+
     # replace dslkfjsdfljf fix pls
     async def db_add_exp(self, message: disnake.Message):
         if message.content[0] == '!':
@@ -68,8 +72,9 @@ class DataBase(commands.Cog):
         for value in self.coll.find({'_id': ctx.guild.id}, {'_id': 0,'membersName': 1}):
             return value['membersName'][ctx.author.name.replace('.', '')]
     
-    @commands.command()
-    async def set_log_channel(self,message: disnake.Message):
+    @commands.command(name='SetLogChannel')
+    async def set_log_channel(self,stx):
+        message = stx.message
         self.coll.update_one({'_id': message.guild.id},{'$set': {'logChannel': int(message.content.split(' ')[1])}})
     
     @commands.command()
