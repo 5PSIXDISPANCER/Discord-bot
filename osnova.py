@@ -1,14 +1,10 @@
 import disnake
 import disnake.ext.commands
 import config
-import datetime
 from dpyConsole import Console
-from disnake import Embed 
 from disnake.ext import commands 
 import disnake.ext 
 
-
-#Переменные необходимые в коде, для его сокращения.
 intents = disnake.Intents().all() #разрешения
 bot = commands.Bot(command_prefix=config.prefix, intents=intents, test_guilds=[1232407034108973186]) #префикс команд и разрешения
 my_console = Console(bot)
