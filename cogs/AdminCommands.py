@@ -8,7 +8,7 @@ from disnake.utils import get
 import disnake.ext 
 
 class AdminCommands_slash(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.slash_command(
@@ -106,7 +106,7 @@ class AdminCommands_slash(commands.Cog):
 
 
 class AdminCommands(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
     
     @commands.command()
