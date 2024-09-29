@@ -29,10 +29,6 @@ class ExpEvents(commands.Cog):
             icon_url = stx.author.avatar.url
         )
         await stx.send(embed=embed)
-    @commands.command()
-    async def hello(self, ctx):
-        await ctx.send(f'Hello ... This feels familiar.')
-
 
 def setup(bot):
     bot.add_cog(ExpEvents(bot))      
